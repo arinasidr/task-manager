@@ -4,7 +4,7 @@ from seed import TASKS
 from datetime import date, timedelta
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173", "http://localhost:5174"])
+CORS(app, origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:3000"])
 
 task_db = TASKS.copy()
 
