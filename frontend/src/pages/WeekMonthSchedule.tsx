@@ -13,6 +13,16 @@ import { getTasks } from '../api/tasks'
 import { type Task } from '../types/task'
 import TaskCard from '../components/TaskCard'
 
+const formatGroupDate = (dateStr: string) => {
+    const date = new Date(dateStr)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    if (date.toISOString().split('T')[0] === today.toISOString().split('T')[0]) return 'Сегодня'
+    
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
+}
+
 export default function WeekMonthSchedule() {
     const [tab, setTab] = useState<'week' | 'month'>('week')
     const [sort, setSort] = useState<'date' | 'priority'>('date')
@@ -66,13 +76,15 @@ export default function WeekMonthSchedule() {
 
     return (
         <Box sx={{ mt: 3 }}>
-            <Typography variant="h4">Расписание</Typography>
-
             {error && <Alert severity="error">{error}</Alert>}
 
-            <Tabs value={tab} onChange={(_, newTab) => setTab(newTab)} sx={{ mb: 2 }}>
-                <Tab value="week" label="Неделя" />
-                <Tab value="month" label="Месяц" />
+            <Tabs
+                value={tab}
+                onChange={(_, newTab) => setTab(newTab)}
+                sx={{ mb: 2, '& .MuiTabs-indicator': { backgroundColor: '#534AB7' } }}
+            >
+                <Tab value="week" label="Неделя" sx={{ '&.Mui-selected': { color: '#534AB7' } }} />
+                <Tab value="month" label="Месяц" sx={{ '&.Mui-selected': { color: '#534AB7' } }} />
             </Tabs>
 
             <ToggleButtonGroup
@@ -83,8 +95,18 @@ export default function WeekMonthSchedule() {
                 }}
                 sx={{ mb: 2 }}
             >
-                <ToggleButton value="date">По дате</ToggleButton>
-                <ToggleButton value="priority">По приоритету</ToggleButton>
+                <ToggleButton
+                    value="date"
+                    sx={{ textTransform: 'none', '&.Mui-selected': { backgroundColor: '#534AB7', color: 'white' } }}
+                >
+                    По времени
+                </ToggleButton>
+                <ToggleButton
+                    value="priority"
+                    sx={{ textTransform: 'none', '&.Mui-selected': { backgroundColor: '#534AB7', color: 'white' } }}
+                >
+                    По приоритету
+                </ToggleButton>
             </ToggleButtonGroup>
 
             {isLoading && <CircularProgress />}
@@ -97,7 +119,7 @@ export default function WeekMonthSchedule() {
                 Object.entries(grouped).map(([date, dateTasks]) => (
                     <Box key={date} sx={{ mb: 2 }}>
                         <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-                            {date}
+                            {formatGroupDate(date)}
                         </Typography>
                         {dateTasks.map((task) => (
                             <TaskCard key={task.id} task={task} />

@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
 import Alert from '@mui/material/Alert'
+import Grid from '@mui/material/Grid'
 
 import { getToday, getUpcoming } from '../api/tasks'
 import { type Task } from '../types/task'
@@ -42,39 +43,76 @@ export default function DaySchedule() {
         fetchData()
     }, [])
     return (
-        <Box sx={{ mt: 3 }}>
-            <Typography>Расписание на сегодня</Typography>
-
+        <Box sx={{ mt: 3, px: 0}}>
             {error && <Alert severity="error">{error}</Alert>}
-
             {isLoading && <CircularProgress />}
 
-            {!isLoading && todayTasks.length === 0 && (
-                <Typography color="text.secondary">Задач на сегодня нет</Typography>
+            {!isLoading && (
+                <Grid container spacing={3.5}>
+                    <Grid size={6} sx={{ minWidth: 0 }}>
+                        <Typography variant="h6" sx={{ mb: 2 }}>
+                            По времени
+                        </Typography>
+                        {todayTasks.length === 0 && (
+                            <Typography color="text.secondary">Задач на сегодня нет</Typography>
+                        )}
+                        {todayTasks.map((task) => (
+                            <Box
+                                key={task.id}
+                                sx={{ display: 'flex', gap: 2, mb: 1, alignItems: 'flex-start' }}
+                            >
+                                <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ pt: 1, minWidth: 35 }}
+                                >
+                                    {task.over_time}
+                                </Typography>
+                                <Box
+                                    sx={{
+                                        borderLeft: '2px solid #AFA9EC',
+                                        pl: 1,
+                                        flex: 1,
+                                        width: '100%',
+                                    }}
+                                >
+                                    <TaskCard task={task} />
+                                </Box>
+                            </Box>
+                        ))}
+                    </Grid>
+
+                    <Grid size={6}>
+                        <Typography variant="h6" sx={{ mb: 2 }}>
+                            Топ недели
+                        </Typography>
+                        {weekTasks.length === 0 ? (
+                            <Typography color="text.secondary">Задач нет</Typography>
+                        ) : (
+                            weekTasks.map((task) => (
+                                <Box key={task.id} sx={{ width: '100%' }}>
+                                    <TaskCard task={task} />
+                                </Box>
+                            ))
+                        )}
+
+                        <Divider sx={{ my: 2 }} />
+
+                        <Typography variant="h6" sx={{ mb: 2 }}>
+                            Топ месяца
+                        </Typography>
+                        {monthTasks.length === 0 ? (
+                            <Typography color="text.secondary">Задач нет</Typography>
+                        ) : (
+                            monthTasks.map((task) => (
+                                <Box key={task.id} sx={{ width: '100%' }}>
+                                    <TaskCard task={task} />
+                                </Box>
+                            ))
+                        )}
+                    </Grid>
+                </Grid>
             )}
-            {!isLoading &&
-                todayTasks.map((task) => (
-                    <Box key={task.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography variant="caption">{task.over_time}</Typography>
-                        <TaskCard task={task} />
-                    </Box>
-                ))}
-
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="h6">Топ задач на неделю</Typography>
-
-            {!isLoading && weekTasks.length === 0 && (
-                <Typography color="text.secondary">Задач на неделе нет</Typography>
-            )}
-            {!isLoading && weekTasks.map((task) => <TaskCard key={task.id} task={task} />)}
-
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="h6">Топ задач на месяц</Typography>
-
-            {!isLoading && monthTasks.length === 0 && (
-                <Typography color="text.secondary">Задач на месяц нет</Typography>
-            )}
-            {!isLoading && monthTasks.map((task) => <TaskCard key={task.id} task={task} />)}
         </Box>
     )
 }

@@ -15,29 +15,29 @@ export default function AddTask() {
     const navigate = useNavigate()
 
     const [form, setForm] = useState({
-        title: "",
-        description: "",
+        title: '',
+        description: '',
         priority: 2 as 1 | 2 | 3,
-        over_date: "",
-        over_time: "",
-        status: "pending" as const
+        over_date: '',
+        over_time: '',
+        status: 'pending' as const,
     })
 
     const [validateErrors, setValidateErrors] = useState({
-        title: "",
-        over_date: ""
+        title: '',
+        over_date: '',
     })
 
     const [error, setError] = useState<string>('')
     const [isLoading, setIsLoading] = useState(false)
 
     const formValidate = () => {
-        const newErrors = { title: "", over_date: "" }
+        const newErrors = { title: '', over_date: '' }
         if (!form.title) {
-            newErrors.title = "Необходимо ввести название"
+            newErrors.title = 'Необходимо ввести название'
         }
         if (!form.over_date) {
-            newErrors.over_date = "Необходимо ввести дедлайн"
+            newErrors.over_date = 'Необходимо ввести дедлайн'
         }
         setValidateErrors(newErrors)
         return !newErrors.title && !newErrors.over_date
@@ -45,7 +45,7 @@ export default function AddTask() {
 
     const handleSubmit = async () => {
         const res = formValidate()
-        if (!res) return 
+        if (!res) return
         setIsLoading(true)
         try {
             await createTask(form)
@@ -62,57 +62,79 @@ export default function AddTask() {
     }
 
     return (
-        <Box sx={{ maxWidth: 500, mt: 3 }}>
-            <Typography>
-                Новая задача
-            </Typography>
+        <Box sx={{ maxWidth: 500, mx: 'auto', mt: 3 }}>
+            <Typography>Новая задача</Typography>
 
             {error && <Alert severity="error">{error}</Alert>}
 
-            <TextField fullWidth sx={{ mb: 2 }}
+            <TextField
+                fullWidth
+                sx={{ mb: 2 }}
                 label="Название"
                 value={form.title}
-                onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
                 error={!!validateErrors.title}
                 helperText={validateErrors.title}
+                slotProps={{ htmlInput: { maxLength: 40 } }}
             />
 
-            <TextField fullWidth sx={{ mb: 2 }}
+            <TextField
+                fullWidth
+                sx={{ mb: 2 }}
                 label="Описание (необязательно)"
                 value={form.description}
-                onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
                 multiline
                 rows={2}
+                slotProps={{ htmlInput: { maxLength: 50 } }}
             />
 
-            <Select fullWidth sx={{ mb: 2 }}
+            <Select
+                fullWidth
+                sx={{ mb: 2 }}
                 value={form.priority}
-                onChange={e => setForm(prev => ({ ...prev, priority: e.target.value as 1 | 2 | 3 }))}
+                onChange={(e) =>
+                    setForm((prev) => ({ ...prev, priority: e.target.value as 1 | 2 | 3 }))
+                }
             >
                 <MenuItem value={1}>Низкий</MenuItem>
                 <MenuItem value={2}>Средний</MenuItem>
                 <MenuItem value={3}>Высокий</MenuItem>
             </Select>
 
-            <TextField fullWidth sx={{ mb: 2 }}
+            <TextField
+                fullWidth
+                sx={{ mb: 2 }}
                 label="Дата дедлайна"
                 type="date"
                 slotProps={{ inputLabel: { shrink: true } }}
                 value={form.over_date}
-                onChange={e => setForm(prev => ({ ...prev, over_date: e.target.value }))}
+                onChange={(e) => setForm((prev) => ({ ...prev, over_date: e.target.value }))}
                 error={!!validateErrors.over_date}
                 helperText={validateErrors.over_date}
             />
 
-            <TextField fullWidth sx={{ mb: 2 }}
+            <TextField
+                fullWidth
+                sx={{ mb: 2 }}
                 label="Время дедлайна (необязательно)"
                 type="time"
                 slotProps={{ inputLabel: { shrink: true } }}
                 value={form.over_time}
-                onChange={e => setForm(prev => ({ ...prev, over_time: e.target.value }))}
+                onChange={(e) => setForm((prev) => ({ ...prev, over_time: e.target.value }))}
             />
 
-            <Button onClick={handleSubmit} disabled={isLoading}>
+            <Button
+                fullWidth
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={isLoading}
+                sx={{
+                    mt: 1,
+                    backgroundColor: '#534AB7',
+                    '&:hover': { backgroundColor: '#3C3489' },
+                }}
+            >
                 {isLoading ? 'Загрузка...' : 'Отправить'}
             </Button>
         </Box>

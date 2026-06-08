@@ -4,7 +4,7 @@ from seed import TASKS
 from datetime import date, timedelta
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173"])
+CORS(app, origins=["http://localhost:5173", "http://localhost:5174"])
 
 task_db = TASKS.copy()
 
@@ -49,7 +49,7 @@ def get_tasks_upcoming():
     end_str = (today + delta).isoformat()
 
     res = [t for t in tasks if today_str <= t["over_date"] <= end_str]
-    res = sorted(res, key=lambda x: x["priority"])[:10]
+    res = sorted(res, key=lambda x: -x["priority"])[:3]
 
     return jsonify(res)
 

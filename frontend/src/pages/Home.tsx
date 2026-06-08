@@ -50,42 +50,85 @@ export default function Home() {
     }, [])
     return (
         <Box sx={{ mt: 3 }}>
-            <Typography>Главная</Typography>
             {error && <Alert severity="error">{error}</Alert>}
-            <Grid container spacing={2} sx={{ mb: 3 }}>
+            <Grid container spacing={2} sx={{ mb: 4 }}>
                 <Grid size={4}>
-                    <Card onClick={() => navigate('/day')}>
+                    <Card
+                        onClick={() => navigate('/day')}
+                        sx={{
+                            cursor: 'pointer',
+                            border: '1px solid #534AB7',
+                            borderRadius: 6,
+                            '&:hover': { backgroundColor: '#b5aff8' },
+                        }}
+                    >
                         <CardActionArea>
-                            <CardContent>
-                                <Typography>Расписание на день</Typography>
+                            <CardContent sx={{ textAlign: 'left', py: 1 }}>
+                                <Typography sx={{ fontSize: 28 }}>📅</Typography>
+                                <Typography sx={{ fontWeight: 'bold' }}>
+                                    Расписание на день
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    Задачи на сегодня
+                                </Typography>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 </Grid>
                 <Grid size={4}>
-                    <Card onClick={() => navigate('/week')}>
+                    <Card
+                        onClick={() => navigate('/week')}
+                        sx={{
+                            cursor: 'pointer',
+                            border: '1px solid #534AB7',
+                            borderRadius: 6,
+                            '&:hover': { backgroundColor: '#b5aff8' },
+                        }}
+                    >
                         <CardActionArea>
-                            <CardContent>
-                                <Typography>Неделя / месяц</Typography>
+                            <CardContent sx={{ textAlign: 'left', py: 1 }}>
+                                <Typography sx={{ fontSize: 28 }}>🗓️</Typography>
+                                <Typography sx={{ fontWeight: 'bold' }}>Неделя / месяц</Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    Расписание
+                                </Typography>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 </Grid>
                 <Grid size={4}>
-                    <Card onClick={() => navigate('/add')}>
+                    <Card
+                        onClick={() => navigate('/add')}
+                        sx={{
+                            cursor: 'pointer',
+                            border: '1px solid #534AB7',
+                            borderRadius: 6,
+                            '&:hover': { backgroundColor: '#b5aff8' },
+                        }}
+                    >
                         <CardActionArea>
-                            <CardContent>
-                                <Typography>Добавить задачу</Typography>
+                            <CardContent sx={{ textAlign: 'left', py: 1 }}>
+                                <Typography sx={{ fontSize: 28 }}>➕</Typography>
+                                <Typography sx={{ fontWeight: 'bold' }}>Добавить задачу</Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    Новая запись
+                                </Typography>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 </Grid>
             </Grid>
 
-            <Typography>Пора приступить</Typography>
+            <Typography sx={{ mb: 2, textAlign: 'left' }}>Пора приступить</Typography>
             {isLoading && <CircularProgress />}
             {!isLoading && tasks.length === 0 && (
-                <Typography color='text.secondary'>Нет срочных задач</Typography>
+                <Typography
+                    color="text.disabled"
+                    variant="body2"
+                    sx={{ textAlign: 'center', py: 2 }}
+                >
+                    Нет срочных задач
+                </Typography>
             )}
             {!isLoading && tasks.map((task) => <TaskCard key={task.id} task={task} />)}
         </Box>
